@@ -1,0 +1,83 @@
+/* Hide the first section */ 
+body.snap-block-init #section-0 ul.section { display:none !important; }
+body.snap-block-init.editing #section-0 ul.section { display:block !important; }
+body.snap-block-init.editing #section-0 ul.section:before {
+	content:"Snap has been initialized which means the section below will be hidden and any activities will added to a side menu for course navigation.";
+	display:block;
+	color: #706c00;
+	background-color: #fffb8e;
+	margin-bottom: 30px;
+	padding: 14px 20px 16px;
+	border-top: 8px solid #706c00;
+}
+/* Add squares before each item */
+/*
+.block_snap .content ul, .block_snap ul.unlist  { list-style: square; color:#f7994d; margin: 0 0 10px 10px; } 
+.block_snap .content ul li { padding:2px 4px; position: relative }
+*/
+/* Add arrows before each item */
+.block_snap .content ul  { list-style: none; margin: 0 0 10px 0; color:inherit; }
+.block_snap .content ul li { padding:2px 4px 2px 20px; position: relative }
+.block_snap .content ul li:before {
+    border-bottom: 5px solid transparent;
+    border-top: 5px solid transparent;
+    border-left: 6px solid #f7994d;
+    content: " ";
+    display: inline-block;
+    height: 0;
+    left: 5px;
+    margin-right: 10px;
+    position: absolute;
+    top: 9px;
+    width: 0;
+}
+/* JS SNAP Sections Menu */
+.snap-sections-nav { margin: 20px 0 10px; }
+.snap-sections-nav-label { 
+	display:inline-block; 
+	margin-right:10px;
+	text-transform:uppercase; 
+	font-weight:bold; 
+	font-size:14px; 
+	vertical-align:middle;
+}
+.snap-sections-nav-btn { 
+	display:inline-block; 
+	vertical-align:middle;
+	margin-right:6px; 
+}
+.snap-sections-nav-btn a,
+.snap-sections-nav-btn a:focus {  
+	display:inline-block;
+	margin:0;
+	padding:0;
+	width:30px;
+	height:30px;
+	line-height:29px;
+	font-size:16px;
+	text-align:center;
+	border:none;
+	border-radius:20px;
+	color:#fff;
+	background-color:#99908b;  
+	text-decoration:none;
+	vertical-align: middle;
+}
+.snap-sections-nav-btn.snap-current a {
+	background-color:#cb6d20;
+}
+.snap-sections-nav-btn a:hover {
+	color:#fff;
+	background-color:#02E3EF;
+	text-decoration:none;  
+	-webkit-transition: all 0.2s ease-out;
+	-moz-transition: all 0.2s ease-out;
+	-ms-transition: all 0.2s ease-out;
+	-o-transition: all 0.2s ease-out;
+	transition: all 0.2s ease-out;
+}
+.snap-sections-nav-btn a:active {
+	color:#fff !important;
+	background-color:#413a35 !important;
+	text-decoration:none;
+}
