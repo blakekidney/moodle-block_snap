@@ -8,6 +8,51 @@ This Javascript assists block_snap.
 require(['jquery'], function($) {	
 	
 	/********************************************
+	PRINT BUTTON FUNCTIONALITY
+	*********************************************/
+	$('#snap_print_page').click(function(event) {
+		//copy the doctype
+		var newline = "\r\n";
+		var html = "<!DOCTYPE "
+				 + document.doctype.name
+				 + (document.doctype.publicId ? ' PUBLIC "' + document.doctype.publicId + '"' : '')
+				 + (!document.doctype.publicId && document.doctype.systemId ? ' SYSTEM' : '') 
+				 + (document.doctype.systemId ? ' "' + document.doctype.systemId + '"' : '')
+				 + '>' + newline;
+		html += '<html>' + newline + '<head>' + newline;
+		//copy tags
+		$('head').find('meta,title,link').each(function() {
+			var tag = $(this).prop('tagName').toLowerCase();
+			html += '<' + tag;	
+			//iterate the attributes
+			$.each(this.attributes, function(i, a) {
+				html += ' ' + a.name.toLowerCase() + '="' + a.value + '"';
+			});	
+			if($(this).html()) html += ' >' + $(this).html()+'</' + tag + '>';
+			else html += ' />';
+			html += newline;
+		});
+		html += '</head>' + newline;
+		html += '<body class="'+$('body').attr('class')+' snap-printing">' + newline;
+		//copy the main region
+		html += '<div id="region-main">' + newline;
+		html += $('#region-main').html() + newline;
+		html += '</div>' + newline;
+		html += '</body>' + newline + '</html>';
+
+		//write to a new window
+		var w = 540, h = 600;
+		var prop = 'width=' + w + ', height=' + h + ', '
+				 + 'left=' + (Math.max(screen.width-w, 0) / 2)
+				 + 'top=' + (Math.max(screen.height-h, 0) / 2)
+				 + 'location=no, titlebar=no, menubar=no, status=no,'
+				 + 'resizable=yes, scrollbars=yes, toolbar=yes';
+		var win = window.open('', '_blank', prop);
+		win.document.write(html);
+		win.print();		
+	});	
+	
+	/********************************************
 	INITIALIZE SNAP ON COURSE HOME PAGE
 	*********************************************/	
 	//if we are in editing mode, then skip
@@ -29,6 +74,11 @@ require(['jquery'], function($) {
 	var label = $('#SnapJSData').attr('data-nav-label');
 	var html = '';
 		
+	/********************************************
+	MOVE PROGRESS BAR
+	*********************************************/
+	$('#snap-progress').appendTo(lead);
+	
 	/********************************************
 	CREATE SECTION BUTTONS
 	*********************************************/
@@ -78,5 +128,5 @@ require(['jquery'], function($) {
 			//store the element in storage so that we can start here on page refresh
 			if(store) store.setItem('snapcurrent', $(this).attr('href'));
 		});
-
+	
 });

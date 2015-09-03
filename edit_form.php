@@ -16,13 +16,13 @@ class block_snap_edit_form extends block_edit_form {
 		//topics navigation
 		$mform->addElement('select', 'config_topicnav', get_string('config_label_topicnav', 'block_snap'), array('1' => 'enabled', '0' => 'disabled'));
 		$mform->setDefault('config_topicnav', '1');
-		$mform->setType('config_topicnav', PARAM_TEXT);
+		$mform->setType('config_topicnav', PARAM_INT);
 		$mform->addHelpButton('config_topicnav', 'config_help_topicnav', 'block_snap');
 		
 		//topics navigation label
 		$mform->addElement('text', 'config_navlabel', get_string('config_label_navlabel', 'block_snap'), 'maxlength="30" size="15" ');
 		$mform->setDefault('config_navlabel', get_string('navlabel', 'block_snap'));
-		$mform->setType('config_navlabel', PARAM_INT);
+		$mform->setType('config_navlabel', PARAM_TEXT);
 		$mform->addHelpButton('config_navlabel', 'config_help_navlabel', 'block_snap');
 		
 		//syllabus button option
@@ -36,6 +36,6 @@ class block_snap_edit_form extends block_edit_form {
 		$mform->setDefault('config_schedule', '1');
 		$mform->setType('config_schedule', PARAM_INT); 
 		$mform->addHelpButton('config_schedule', 'config_help_schedule', 'block_snap');
-		
-    }
+
+	}
 }

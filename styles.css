@@ -1,7 +1,7 @@
 /* Hide the first section */ 
-body.snap-block-init #section-0 ul.section { display:none !important; }
-body.snap-block-init.editing #section-0 ul.section { display:block !important; }
-body.snap-block-init.editing #section-0 ul.section:before {
+body.path-course.snap-block-init #section-0 ul.section { display:none !important; }
+body.path-course.snap-block-init.editing #section-0 ul.section { display:block !important; }
+body.path-course.snap-block-init.editing #section-0 ul.section:before {
 	content:"Snap has been initialized which means the section below will be hidden and any activities will added to a side menu for course navigation.";
 	display:block;
 	color: #706c00;
@@ -15,6 +15,7 @@ body.snap-block-init.editing #section-0 ul.section:before {
 .block_snap .content ul, .block_snap ul.unlist  { list-style: square; color:#f7994d; margin: 0 0 10px 10px; } 
 .block_snap .content ul li { padding:2px 4px; position: relative }
 */
+body.block.block_snap .content { padding-bottom:0; } 
 /* Add arrows before each item */
 .block_snap .content ul  { list-style: none; margin: 0 0 10px 0; color:inherit; }
 .block_snap .content ul li { padding:2px 4px 2px 20px; position: relative }
@@ -31,7 +32,16 @@ body.snap-block-init.editing #section-0 ul.section:before {
     top: 9px;
     width: 0;
 }
-/* JS SNAP Sections Menu */
+.block_snap .edit-controls {
+	text-align:center;
+	margin:20px 0;
+}
+.block_snap .snap-nav-header {
+	font-weight:bold;
+}
+/************************************************
+JS SNAP Sections Menu
+*************************************************/
 .snap-sections-nav { margin: 20px 0 10px; }
 .snap-sections-nav-label { 
 	display:inline-block; 
@@ -80,4 +90,510 @@ body.snap-block-init.editing #section-0 ul.section:before {
 	color:#fff !important;
 	background-color:#413a35 !important;
 	text-decoration:none;
+}
+/************************************************
+PROGRESS BAR
+*************************************************/
+.snap-progress {	
+	margin:20px 0 0;
+}	
+.snap-progress .snap-progress-bar {
+	display:block;
+	position:relative;
+	height:30px;
+	border-radius:30px;
+	border:2px solid #b6b0ac;
+	overflow:hidden;
+	background-color:white;
+}
+/* MIDDLE SECTION */
+.section .snap-progress {
+	margin:10px 0;
+}
+.section .snap-progress .snap-progress-bar { 
+	border-color:#c5bfbd;
+}
+/* MEASUREMENT */
+.snap-progress .snap-progress-text,
+.snap-progress .snap-progress-needed,
+.snap-progress .snap-progress-completed {
+	display:block;
+	height:30px;
+	line-height: 30px;
+	position:absolute;
+	top:0;
+	left:0;
+	color:#4c433e;    
+	font-size: 12px;
+    font-weight: bold;
+	background-color:transparent;
+}
+.snap-progress .snap-progress-needed {
+	z-index:105;
+	border-right:2px solid #aaa;
+}
+.snap-progress .snap-progress-text {
+	z-index:104;
+	left: 15px;
+}
+.snap-progress .snap-progress-completed {
+	z-index:103;
+}
+/* NOTE */
+.snap-progress .snap-progress-note {
+	font-size: 11px;
+    position: relative;
+    right: 15px;
+    text-align: right;
+}
+/* GREEN */
+.snap-progress.progress-ahead .snap-progress-bar { 
+	border-color:#66d300; 
+}
+.snap-progress.progress-ahead .snap-progress-text,
+.snap-progress.progress-ahead .snap-progress-note { 
+	color:#4a7f1a; 
+}
+.snap-progress.progress-ahead  .snap-progress-completed {	
+	background: #deffc1; /* Old browsers */
+	background: -moz-linear-gradient(top, #deffc1 0%, #caff99 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #deffc1), color-stop(100%, #caff99)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #deffc1 0%, #caff99 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #deffc1 0%, #caff99 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #deffc1 0%, #caff99 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #deffc1 0%, #caff99 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#deffc1', endColorstr='#caff99', GradientType=0 ); /* IE6-9 */
+}
+/* YELLOW */
+.snap-progress.progress-behind .snap-progress-bar { 
+	border-color:#F4CC00; 
+}
+.snap-progress.progress-behind .snap-progress-text,
+.snap-progress.progress-behind .snap-progress-note { 
+	color:#7f6f1a; 
+}
+.snap-progress.progress-behind  .snap-progress-completed {	
+	background: #fff5c1; /* Old browsers */
+	background: -moz-linear-gradient(top, #fff5c1 0%, #ffef99 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fff5c1), color-stop(100%, #ffef99)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #fff5c1 0%, #ffef99 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #fff5c1 0%, #ffef99 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #fff5c1 0%, #ffef99 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #fff5c1 0%, #ffef99 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fff5c1', endColorstr='#ffef99', GradientType=0 ); /* IE6-9 */
+}
+/* RED */
+.snap-progress.progress-waybehind .snap-progress-bar { 
+	border-color:#EA1B00; 
+}
+.snap-progress.progress-waybehind .snap-progress-text,
+.snap-progress.progress-waybehind .snap-progress-note { 
+	color:#7f231a; 
+}
+.snap-progress.progress-waybehind  .snap-progress-completed {
+	
+	background: #ffc6c1; /* Old browsers */
+	background: -moz-linear-gradient(top, #ffc6c1 0%, #ffa399 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffc6c1), color-stop(100%, #ffa399)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #ffc6c1 0%, #ffa399 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #ffc6c1 0%, #ffa399 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #ffc6c1 0%, #ffa399 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #ffc6c1 0%, #ffa399 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffc6c1', endColorstr='#ffa399', GradientType=0 ); /* IE6-9 */
+}
+
+
+/************************************************
+PROGRESS MODULE COMPLETION SELECTION TOOL
+*************************************************/
+body.snap-progress-select #region-main h3.section-header {
+	font-size: 28px;
+    font-weight: normal;
+    line-height: 28px;
+	margin:20px 0 10px !important;
+	border-top: 4px dotted #c5bfbd;
+	padding-top:15px;
+}
+body.snap-progress-select .subheader {
+	padding:4px 12px;
+	background-color:#cb6d20;
+	margin-top:30px;
+	margin-bottom:15px;
+	font-size:16px;
+	line-height:24px;
+	font-weight:normal;
+	color: white;
+}
+body.snap-progress-select .mform .fitem {
+	margin:0;
+	padding: 4px 8px;
+}
+body.snap-progress-select .mform .fitem:hover {
+	background-color: #fff2cc;
+}
+body.snap-progress-select .mform .fcheckbox > span {
+	margin:0 !important;
+}
+body.snap-progress-select .mform .fitem .felement {
+	margin-left:0 !important;
+}
+body.snap-progress-select .mform .fitem div.fitemtitle {
+	display: none !important;
+}
+body.snap-progress-select .mform .fcheckbox input + label {
+	opacity:0.7;
+}
+body.snap-progress-select .mform .fcheckbox input:checked + label {
+	font-weight:bold;
+	opacity:1;
+}
+body.snap-progress-select #fgroup_id_buttonar {
+	padding-left:20px;
+}
+/************************************************
+PROGRESS MODULE COMPLETION DATING TOOL
+*************************************************/
+#block_snap_dating_tool {
+	display:none;
+}
+body.snap-progress-dating #block_snap_dating_tool {
+	display:block;
+}
+body.snap-progress-dating .snap-nojs {
+	display:none;
+}
+body.snap-progress-dating {
+	margin-left:300px !important;
+}
+body.snap-progress-dating .snap-course-mods {
+	position:fixed;
+	top:0;
+	left:0;
+	height:100%;
+	/*border-right:4px solid #514C7C;	*/
+	width:300px;
+	background-color:#EBEAF9; /*E6E5FF;*/
+	overflow:auto;
+}
+body.snap-progress-dating .snap-course-mods-bar {
+	position:fixed;
+	top:0;
+	left:296px;
+	width:4px;
+	height:100%;
+	background-color:#514C7C;	
+}
+body.snap-progress-dating .snap-course-mods-inner {
+	margin:15px;	
+}
+body.snap-progress-dating .snap-controls {
+	background-color: #514C7C;
+	margin-left:-15px;
+	margin-right:-15px;
+	margin-top:-15px;
+	margin-bottom:15px;
+	padding:20px 15px;
+}
+body.snap-progress-dating .snap-controls > div {
+	vertical-align:middle;
+	line-height: 12px;
+	clear:both;
+}
+body.snap-progress-dating .snap-controls .control-header {
+	color:white;
+	font-weight:bold;
+	text-transform:uppercase;
+}
+body.snap-progress-dating .snap-controls hr {
+	border:none;
+	border-top:1px dotted white;
+	margin:10px 0;	
+	clear: both;
+	opacity:0.5;
+}
+body.snap-progress-dating .snap-controls label,
+body.snap-progress-dating .snap-controls span {
+	color:white !important;
+	display:inline !important;
+	font-size:12px;
+}
+body.snap-progress-dating .snap-controls input {
+	float:left;
+	margin-right:10px;
+}
+body.snap-progress-dating .snap-controls input.input-time {
+	width:70px !important;
+}
+body.snap-progress-dating .snap-controls input.input-open-date {
+	width:20px !important;
+}
+body.snap-progress-dating .snap-course-mods .snap-modlist {
+    margin-bottom: 40px;
+}
+body.snap-progress-dating .mod-item {
+    margin:4px;
+	padding: 4px 4px 4px 26px;
+    position: relative;
+	cursor: move;
+}
+body.snap-progress-dating .mod-item:hover {
+    background-color: white;
+	border-radius: 2px;
+}
+body.snap-progress-dating .mod-icon {
+    position: absolute;
+    top: 0;
+    left: 4px;
+}
+body.snap-progress-dating .mod-name {
+    display:block;
+	font-size: 13px;
+    line-height: 15px;
+	color: #3D348E;
+}
+body.snap-progress-dating .snap-calendar table {
+	border-collapse:collapse;
+	width: 100%;
+	margin-top:20px;
+}
+body.snap-progress-dating .snap-calendar td {
+	border:2px solid #fff;
+	width:14%;
+	vertical-align:top;
+	text-align:left;
+	height:100px;
+	padding:0;
+	background-color:#EBEAF9;
+}
+body.snap-progress-dating .snap-calendar td.week-num {
+	width:2%;
+	font-size:16px;
+	color:#514C7C;
+	vertical-align:middle;
+	text-align:center;
+	border-top:0;
+	border-left:0;
+	border-bottom:0;	
+	background-color:#fff;
+}
+body.snap-progress-dating .snap-calendar td.inactive {
+	background-color:#fff;
+}
+body.snap-progress-dating .snap-calendar .snap-calendar-date {
+	font-size:11px;
+	line-height:11px;
+	font-weight:bold;
+	background-color:#514C7C;
+	color:white;
+	padding:6px 8px;
+}
+body.snap-progress-dating .snap-calendar .snap-modlist {
+	min-height:100%;
+}
+body.snap-progress-dating .snap-calendar .snap-modlist.drophover {
+	background-color:#DFFFD3; /* ffecba , DFFFD3 */
+}
+body.snap-progress-dating .backbutton {
+	margin-top:40px;
+}
+/* RIGHT SIDE */
+body.snap-progress-dating #bodywrap {
+	position:fixed;
+	top:0;
+	left:0;
+	height:100%;
+	overflow:auto;
+	width:75%;
+}
+body.snap-progress-dating #bodywrap .snap-course-mods {
+	left:auto;
+	right:0;
+	border-right:0;
+	width:25%;
+}
+body.snap-progress-dating #bodywrap .snap-course-mods-bar {
+	left:75%;
+}
+/************************************************
+SCHEDULE
+*************************************************/
+.snap-schedule .snap-progress-overview {
+	margin:20px 0;
+}
+.snap-schedule .week-block {
+	margin: 0 0 30px;
+}
+.snap-schedule .date-block {
+	margin: 15px 0;
+}
+.snap-schedule .date-block.no-activities {
+	opacity:0.5;
+}
+.snap-schedule .week-header {
+	background-color: #cb6d20;
+    color: white;
+    font-size: 1.2em;
+    padding: 6px 12px;
+}
+.snap-schedule .date-header {
+	/*color: #3a87ad;*/
+    font-weight: bold;
+    margin: 15px 0 5px;
+    text-transform: uppercase;
+}
+.snap-schedule .mod {
+	margin-left:10px;
+}
+.snap-schedule .mod span { 
+	display:inline-block;
+}
+.snap-schedule .mod .status-icon { 
+	margin-right:10px;
+}
+.snap-schedule .mod .mod-name { 
+	margin-right:10px;
+}
+.snap-schedule .mod .status { 
+	/*color:#3a87ad;*/
+	font-size:0.9em;
+	float:right;
+}
+body.snap-schedule .mod .status .late {
+	color:red;
+}
+body.snap-printing { background:none white !important; }
+body.snap-printing .out-controls { display:none; }
+body.snap-printing .snap-schedule .week-header { 
+	background-color:white;
+	color:#cb6d20;
+	padding:6px 0;
+	border-top:2px solid #cb6d20;
+	border-bottom:2px solid #cb6d20;
+}
+/************************************************
+OVERALL PROGRESS
+*************************************************/
+body.snap-progress-overall table {
+	border: 1px solid #ddd !important;
+}
+body.snap-progress-overall .stupic,
+body.snap-progress-overall .stupic > a,
+body.snap-progress-overall .stuname {
+	display:inline-block;
+	vertical-align:middle;
+}
+body.snap-progress-overall table .stupic {
+	margin-right:7px;
+}
+body.snap-progress-overall table td {
+	vertical-align:middle !important;
+	padding:20px 8px !important;
+}
+body.snap-progress-overall table tr:hover td {
+	background-color:#ffebb2 !important;
+}
+body.snap-progress-overall table td.c0,
+body.snap-progress-overall table td.c2 {
+	width:10%;
+	white-space:nowrap;
+}
+body.snap-progress-overall .snap-progress {
+	margin:0;
+}
+body.snap-progress-overall .snap-progress .snap-progress-bar {
+	border-radius:24px;
+}
+body.snap-progress-overall .snap-progress .snap-progress-bar,
+body.snap-progress-overall .snap-progress .snap-progress-text, 
+body.snap-progress-overall .snap-progress .snap-progress-needed, 
+body.snap-progress-overall .snap-progress .snap-progress-completed {
+	height: 24px;
+	line-height:24px;
+}
+/************************************************
+STUDENT CHOOSER
+*************************************************/
+body.snap-block-init .studentchooser {
+	background-color: #f1efef;
+    padding: 15px;
+	margin-bottom: 20px;
+}
+body.snap-block-init .studentchooser div.singleselect {
+	display:block;
+	text-align:left;	
+}
+body.snap-block-init .studentchooser label,
+body.snap-block-init .studentchooser select.singleselect {
+	display:inline-block;	
+}
+
+/************************************************
+SNAP PROGRESS STUDENT
+*************************************************/
+body.snap-progress-student table.snap-progress-overview { margin-top:30px; }
+
+/************************************************
+FORUM POSTS
+*************************************************/
+body.snap-forum-posts { }
+body.snap-forum-posts .forum-item { margin-bottom:40px; }
+body.snap-forum-posts .forum-subject {
+	font-size: 1.4em;
+	background-color:#635B38;
+	padding:6px 12px;
+	color:#FFEF6C;
+	vertical-align:middle;
+	line-height: 26px;
+	overflow:hidden;
+}
+body.snap-forum-posts .forum-subject a.btn {
+	float:right;
+	border: 1px solid white;
+	padding:6px 12px;
+}
+body.snap-forum-posts .forum-subject-name {
+	display:inline-block;
+}
+body.snap-forum-posts .forum-date {
+	background-color:#9E965A;
+	color:white;
+	padding:3px 12px;
+}
+body.snap-forum-posts .forum-message {
+	background-color:#FBF7BF;
+	padding:12px;
+}
+body.snap-forum-posts .forum-file {
+	margin:0 20px;
+	padding:2px 0 2px 24px;
+	min-height:16px;
+}
+body.snap-forum-posts .forum-parent-divider {
+	background-color:#555;
+	color:white;
+	/*
+	background-color:white;
+	color:#555;
+	font-weight:bold;
+	*/
+	padding:4px 12px;
+}
+body.snap-forum-posts .forum-parent-message {
+	background-color:#eee;
+	color:#555;
+	padding:12px;
+}
+
+
+/************************************************
+COMMON
+*************************************************/
+body.snap-block-init .course-name {
+	font-weight:300;
+	margin:0 0 10px;
+	font-size:22px;
+}
+a > span.icon, 
+a > span.icon-white {
+    margin-right: 7px;
 }

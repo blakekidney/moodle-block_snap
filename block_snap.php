@@ -6,7 +6,7 @@
  * @copyright 2015 Blake Kidney
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class block_snap extends block_list {
+class block_snap extends block_base {
 		
 	/**
 	 * Control which pages the block can be added to.
@@ -112,9 +112,18 @@ class block_snap extends block_list {
 		global $DB, $USER, $COURSE;
 		
 		$this->content = new stdClass;
-		$this->content->items  = array();
-		$this->content->icons  = array();
+		$this->content->text   = '';
         $this->content->footer = '';
+		$menuitems = array();
+		
+		//pull the context for this course
+		$coursecontext = context_course::instance($COURSE->id);
+		
+		//check to make sure the user is enrolled
+		if(!is_siteadmin() && !is_enrolled($coursecontext)) return $this->content; 
+		
+		//determine access levels
+		$canViewStuProg = has_capability('block/snap:viewstudentprogress', $coursecontext);
 		
 		//pull the admin settings
 		$syllUrl = trim(get_config('block_snap', 'syllabus_url'));
@@ -175,7 +184,7 @@ class block_snap extends block_list {
 		
 		//add a link to the course
 		$url = new moodle_url('/course/view.php', array('id' => $COURSE->id));
-		$this->content->items[] = HTML_WRITER::link($url, get_string('button_home', 'block_snap'));		
+		$menuitems[] = html_writer::link($url, get_string('button_home', 'block_snap'));		
 		
 		//add a link for the syllabus	
 		if($syllUrl && (!isset($this->config->syllabus) || $this->config->syllabus)) {		
@@ -195,13 +204,15 @@ class block_snap extends block_list {
 				}
 				$syllUrl = rtrim($syllUrl, '&');
 			}
-			$this->content->items[] = HTML_WRITER::link($syllUrl, get_string('button_syllabus', 'block_snap'));
+			$menuitems[] = html_writer::link($syllUrl, get_string('button_syllabus', 'block_snap'));
 		}
 		
-		//add a link for the schedule	
-		if(!isset($this->config->schedule) || $this->config->schedule) {
-			$url = new moodle_url('/blocks/snap/schedule.php', array('id' => $COURSE->id));
-			$this->content->items[] = HTML_WRITER::link($url, get_string('button_schedule', 'block_snap'));
+		//add a link for the schedule - only if completion is enabled
+		if($COURSE->enablecompletion) {
+			if(!isset($this->config->schedule) || $this->config->schedule) {
+				$url = new moodle_url('/blocks/snap/schedule.php', array('id' => $COURSE->id));
+				$menuitems[] = html_writer::link($url, get_string('button_schedule', 'block_snap'));
+			}
 		}
 		
 		//add a link to each of the modules in the top section (section-0)
@@ -210,21 +221,148 @@ class block_snap extends block_list {
 			if(!isset($items[$cmid])) continue;
 			
 			$url = new moodle_url('/mod/'.$items[$cmid]['type'].'/view.php', array('id' => $cmid));
-			$this->content->items[] = HTML_WRITER::link($url, $items[$cmid]['name']);
+			$menuitems[] = html_writer::link($url, $items[$cmid]['name']);
+			
+		}			
+			
+		//add extra links for students
+		if(!$canViewStuProg) {
+			
+			//add a link for classmates
+			$url = new moodle_url('/user/index.php', array('id' => $COURSE->id, 'roleid' => '5', 'mode' => '1'));
+			$menuitems[] = html_writer::link($url, get_string('button_classmates', 'block_snap'));
+			
+			//add a link for grades
+			$url = new moodle_url('/grade/report/index.php', array('id' => $COURSE->id));
+			$menuitems[] = html_writer::link($url, get_string('button_grades', 'block_snap'));
+		}
+		
+		//create the html for the menu
+		$this->content->text .= '<ul class="snap-nav">'.PHP_EOL;
+		foreach($menuitems as $item) {
+			$this->content->text .= '<li>'.$item.'</li>'.PHP_EOL;
+		}
+		$this->content->text .= '</ul>'.PHP_EOL;
+		
+		//if course completion is disabled add a link informing that the schedule will not appear unless they enable it
+		if($this->page->user_is_editing()) {
+			
+			if($COURSE->enablecompletion) {
+				$this->content->text .= '<div class="edit-controls">'.PHP_EOL;
+				$this->content->text .= '<p>'.PHP_EOL;
+				$this->content->text .= html_writer::link(
+					new moodle_url('/blocks/snap/progress_select.php', array('id' => $COURSE->id)), 
+					get_string('button_modselector', 'block_snap'),
+					array('class' => 'btn btn-default')
+				);
+				$this->content->text .= '</p>'.PHP_EOL;
+				$this->content->text .= '<p>'.PHP_EOL;
+				$this->content->text .= html_writer::link(
+					new moodle_url('/blocks/snap/progress_dating.php', array('id' => $COURSE->id)), 
+					get_string('button_dateselector', 'block_snap'),
+					array('class' => 'btn btn-success')
+				);
+				$this->content->text .= '</p>'.PHP_EOL;
+				$this->content->text .= '</div>'.PHP_EOL;
+			} else {
+				$this->content->text .= html_writer::tag('p', get_string('no_completion_tracking', 'block_snap'), array('class' => 'alert alert-danger'));
+			}		
+		
+		
+		} else {
+			
+			//COURSE PROGRESS
+			
+			//determine whether this is a teacher or student
+			if($canViewStuProg) {
+				
+				//TEACHER - provide a button to show the progress.
+				$this->content->text .= '<p class="snap-nav-header">'.get_string('header_teacher_tools', 'block_snap').'</p>'.PHP_EOL;
+				$this->content->text .= '<ul class="snap-nav">'.PHP_EOL;
+				
+				//students		
+				$this->content->text .= '<li>'.html_writer::link(
+					new moodle_url('/user/index.php', array('id' => $COURSE->id, 'roleid' => '5', 'mode' => '1')), 
+					get_string('button_students', 'block_snap')
+				).'</li>'.PHP_EOL;
+				
+				//grades
+				$this->content->text .= '<li>'.html_writer::link(
+					new moodle_url('/grade/report/index.php', array('id' => $COURSE->id)), 
+					get_string('button_grades', 'block_snap')
+				).'</li>'.PHP_EOL;
+				
+				//overall student progress
+				$this->content->text .= '<li>'.html_writer::link(
+					new moodle_url('/blocks/snap/progress_overall.php', array('id' => $COURSE->id)), 
+					get_string('button_progress_overall', 'block_snap')
+				).'</li>'.PHP_EOL;
+				
+				//forum postings
+				$this->content->text .= '<li>'.html_writer::link(
+					new moodle_url('/blocks/snap/forum_posts.php', array('id' => $COURSE->id)), 
+					get_string('button_forums', 'block_snap')
+				).'</li>'.PHP_EOL;
+				$this->content->text .= '</ul>'.PHP_EOL;			
+				
+			} else {
+				
+				//STUDENT - create a progress bar
+				$sql = "SELECT '1' AS id, 
+							COUNT(cm.id) AS total, 
+							COUNT(p.id) AS completed,
+							SUM(CASE WHEN cm.completionexpected < UNIX_TIMESTAMP() THEN 1 ELSE 0 END) AS needed
+						FROM {course_modules} cm
+						LEFT JOIN {course_modules_completion} p ON p.coursemoduleid = cm.id 
+							AND p.completionstate > 0
+							AND p.userid = ?
+						WHERE cm.visible = 1
+							AND cm.completion > 0 
+							AND cm.completionexpected > 0
+							AND cm.course = ?
+						";
+				$progdata = $DB->get_record_sql($sql, array($USER->id, $COURSE->id));
+				
+				//don't show the progress bar unless we have assignments marked for completion
+				if($progdata->total > 0) {
+				
+					//we could have done this in MYSQL, but this works too
+					$c = round(($progdata->completed/$progdata->total)*100);  //percent complete
+					$n = round(($progdata->needed/$progdata->total)*100);	  //percent needed or how much should be done by now
+					$d = abs($progdata->completed - $progdata->needed); 	  //difference from what is needed
+					
+					$cls = '';
+					$note = '';
+					if($progdata->completed >= $progdata->needed) {
+						$cls = 'progress-ahead';
+						if($d > 1) $note = str_replace('{x}', $d, get_string('progress_ahead_note', 'block_snap'));					
+					} elseif(($n-$c) > 10) {
+						$cls = 'progress-waybehind';
+						if($d > 1) $note = str_replace('{x}', $d, get_string('progress_behind_note', 'block_snap'));	
+					} else {
+						$cls = 'progress-behind';
+						if($d > 1) $note = str_replace('{x}', $d, get_string('progress_behind_note', 'block_snap'));	
+					}
+					//create the progress bar
+					$this->content->text .= PHP_EOL.'<div id="snap-progress" class="snap-progress '.$cls.'">'.PHP_EOL;		
+					$this->content->text .= '<div class="snap-progress-bar">'.PHP_EOL;	
+					$this->content->text .= '<span class="snap-progress-text">'.get_string('progress', 'block_snap').
+											': '.$c.'% '.get_string('complete', 'block_snap').'</span>'.PHP_EOL;
+					if($n > 1 && $n < 99) $this->content->text .= '<span class="snap-progress-needed" style="width:'.$n.'%"></span>'.PHP_EOL;	
+					$this->content->text .= '<span class="snap-progress-completed" style="width:'.$c.'%"></span>'.PHP_EOL;
+					$this->content->text .= '</div>'.PHP_EOL; 	//snap-progress-bar	
+					if($note) $this->content->text .= '<div class="snap-progress-note">'.$note.'</div>'.PHP_EOL;	
+					$this->content->text .= '</div>'.PHP_EOL; //snap-progress
+				
+				}
+				
+			}
 			
 		}		
-		
-		//add a link for classmates
-		$url = new moodle_url('/user/index.php', array('id' => $COURSE->id, 'roleid' => '5', 'mode' => '1'));
-		$this->content->items[] = HTML_WRITER::link($url, get_string('button_classmates', 'block_snap'));
 			
-		//add a link for grades
-		$url = new moodle_url('/grade/report/index.php', array('id' => $COURSE->id));
-		$this->content->items[] = HTML_WRITER::link($url, get_string('button_grades', 'block_snap'));
-		
 		//require the snap javascript
 		if(!isset($this->config->topicnav) || $this->config->topicnav) {
-			$this->page->requires->js('/blocks/snap/snap.js');		
+			$this->page->requires->js('/blocks/snap/js/snap.js');		
 			$label = (isset($this->config->navlabel)) ? $this->config->navlabel : ($navLabel ? $navLabel : get_string('navlabel', 'block_snap'));
 			$this->content->footer .= '<span id="SnapJSData" data-nav-label="'.$label.'"></span>';
 		}
