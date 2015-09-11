@@ -128,7 +128,6 @@ class block_snap extends block_base {
 		//pull the admin settings
 		$syllUrl = trim(get_config('block_snap', 'syllabus_url'));
 		$syllParams = explode(',', get_config('block_snap', 'syllabus_params'));
-		$navLabel = trim(get_config('block_snap', 'navlabel'));
 				
 		//pull the different modules in the first section
 		$sql = "
@@ -359,13 +358,16 @@ class block_snap extends block_base {
 			}
 			
 		}		
-			
+		
+		//pass configuration data to the javascript
+		$navLabel = trim(get_config('block_snap', 'navlabel'));
+		$this->content->footer .= '<span id="SnapJSData"'.
+			' data-topicnav="'.((!isset($this->config->topicnav) || $this->config->topicnav) ? 'yes' : 'no').'"'.
+			' data-topicnav-label="'.((isset($this->config->navlabel)) ? $this->config->navlabel : ($navLabel ? $navLabel : get_string('navlabel', 'block_snap'))).'"'.
+			'></span>';
+		
 		//require the snap javascript
-		if(!isset($this->config->topicnav) || $this->config->topicnav) {
-			$this->page->requires->js('/blocks/snap/js/snap.js');		
-			$label = (isset($this->config->navlabel)) ? $this->config->navlabel : ($navLabel ? $navLabel : get_string('navlabel', 'block_snap'));
-			$this->content->footer .= '<span id="SnapJSData" data-nav-label="'.$label.'"></span>';
-		}
+		$this->page->requires->js('/blocks/snap/js/snap.js');		
 		
 		return $this->content;
 	}

@@ -90,6 +90,7 @@ $string['schedule_header'] = 'Course Schedule';
 $string['schedule_description'] = 'This will show all of the activities necessary for completion of the course. Only activities that have been given an expected date will appear.';
 $string['schedule_header_progress'] = 'Progress Statistics';
 $string['schedule_nothing_due'] = 'Nothing is due within this week.';
+$string['schedule_no_activites'] = 'There are no activities with dates set.';
 $string['progress_table_total'] = 'Total Activities';
 $string['progress_table_completed'] = 'Completed Activities';
 $string['progress_table_needed'] = 'Needed By Today';
