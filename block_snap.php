@@ -70,7 +70,10 @@ class block_snap extends block_base {
 		$this->title = get_string('blocktitle', 'block_snap');	
 		
 		//add a class to the body indicating snap has initialized on this page
-		$this->page->add_body_class('snap-block-init');
+		//if the header hasn't been printed already
+		if(!$this->page->headerprinted) {
+			$this->page->add_body_class('snap-block-init');
+		}
 		
 	}
 	/**
